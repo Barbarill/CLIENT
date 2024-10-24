@@ -4,8 +4,10 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 
+import utility.Keyboard;
 
-public class Maintest {
+
+public class MainTest {
 
 	/**
 	 * @param args
@@ -14,7 +16,7 @@ public class Maintest {
 	private ObjectInputStream in ; // stream con richieste del client
 	
 	
-	public Maintest(String ip, int port) throws IOException{
+	public MainTest(String ip, int port) throws IOException{
 		InetAddress addr = InetAddress.getByName(ip); //ip
 		System.out.println("addr = " + addr);
 		Socket socket = new Socket(addr, port); //Port
@@ -94,7 +96,7 @@ public class Maintest {
 		int port=new Integer(args[1]).intValue();
 		MainTest main=null;
 		try{
-			main=new Maintest(ip,port);
+			main=new MainTest(ip,port);
 	
 			main.loadDataOnServer();
 			int scelta=main.menu();
