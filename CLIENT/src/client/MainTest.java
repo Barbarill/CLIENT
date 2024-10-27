@@ -91,10 +91,11 @@ public class MainTest {
 		else
 			System.out.println(risposta); // stampo il messaggio di errore
 	}
-	public static void main(String[] args) {
-		String ip=args[0];
-		int port=new Integer(args[1]).intValue();
-		MainTest main=null;
+	public static void main(String[] args) throws IOException {
+		String ip = "127.0.0.1"; // o l'IP desiderato
+		int port = 8080; // la porta appropriata
+
+		MainTest main = new MainTest(ip, port);
 		try{
 			main=new MainTest(ip,port);
 	
