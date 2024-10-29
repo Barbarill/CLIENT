@@ -71,7 +71,7 @@ public class MainTest {
 		
 		
 		out.writeObject(1);
-		System.out.println("Introdurre la profondit  del dendrogramma");
+		System.out.println("Introdurre la profondità del dendrogramma");
 		int depth=Keyboard.readInt();
 		out.writeObject(depth);
 		int dType=-1;
