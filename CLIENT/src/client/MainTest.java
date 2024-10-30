@@ -3,6 +3,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.io.Serializable;
 
 import utility.Keyboard;
 
@@ -60,11 +61,13 @@ public class MainTest {
 		
 		out.writeObject(2);
 		out.writeObject(fileName);
-		String risposta= (String) (in.readObject());
-		if(risposta.equals("OK"))	
-			System.out.println(in.readObject()); // stampo il dendrogramma che il server mi sta inviando
-		else
-			System.out.println(risposta); // stampo il messaggio di errore
+		String risposta= (String) in.readObject();
+		if ("OK".equals(risposta)) {
+			String dendrogramData = (String) in.readObject();
+			System.out.println("Dendrogramma caricato correttamente:\n" + dendrogramData);
+		} else {
+			System.out.println("Errore dal server: " + risposta);
+		}
 	}
 	
 	private void mineDedrogramOnServer() throws IOException, ClassNotFoundException {
