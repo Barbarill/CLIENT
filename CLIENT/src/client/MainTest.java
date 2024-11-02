@@ -79,10 +79,16 @@ public class MainTest {
             System.out.println("Inserire il nome dell'archivio (comprensivo di estensione):");
             String fileName = Keyboard.readString();
             out.writeObject(fileName);
-        } else {
-            System.out.println("Errore dal server: " + risposta);
-        }
+
+        // Ricevi l'oggetto dendrogramma appena generato (supponendo che sia di tipo `String` o simile)
+        String dendrogramData = (String) in.readObject();  // Supponiamo che il server invii i dati come stringa
+        out.writeObject(dendrogramData);  // Invia il dendrogramma generato al server per salvarlo
+
+        System.out.println("Dendrogramma inviato al server per il salvataggio.");
+    } else {
+        System.out.println("Errore dal server: " + risposta);
     }
+}
 
     // Modifica il metodo per accettare una stringa di dati del dendrogramma
     private void mostraDendrogramma(String dendrogramData, String titolo) {
