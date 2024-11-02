@@ -84,7 +84,8 @@ public class MainTest {
         String dendrogramData = (String) in.readObject();  // Supponiamo che il server invii i dati come stringa
         out.writeObject(dendrogramData);  // Invia il dendrogramma generato al server per salvarlo
 
-        System.out.println("Dendrogramma inviato al server per il salvataggio.");
+        String saveResponse = (String) in.readObject();
+        System.out.println(saveResponse);
     } else {
         System.out.println("Errore dal server: " + risposta);
     }
@@ -116,21 +117,41 @@ public class MainTest {
         String ip = "127.0.0.1";
         int port = 8080;
         MainTest main = null;
+        
         try {
             main = new MainTest(ip, port);
-            main.loadDataOnServer();
-            int scelta = main.menu();
-            if (scelta == 1) {
-                main.loadDedrogramFromFileOnServer();
-            } else {
-                main.mineDedrogramOnServer();
+            
+            boolean continueRunning = true; // Variabile per controllare il ciclo
+            
+            while (continueRunning) {
+                main.loadDataOnServer(); // Carica i dati dal server
+                
+                int scelta = main.menu(); // Mostra il menu per la scelta dell'utente
+                
+                if (scelta == 1) {
+                    main.loadDedrogramFromFileOnServer(); // Carica il dendrogramma da un file
+                } else if (scelta == 2) {
+                    main.mineDedrogramOnServer(); // Apprendi il dendrogramma dal database
+                } else {
+                    System.out.println("Scelta non valida. Riprova.");
+                    continue; // Ritorna all'inizio del ciclo se la scelta è non valida
+                }
+    
+                // Chiedi se l'utente vuole continuare
+                System.out.print("Vuoi fare un'altra operazione? (S/N): ");
+                String risposta = Keyboard.readString();
+                if (risposta.equalsIgnoreCase("N")) {
+                    continueRunning = false; // Esci dal ciclo se l'utente non vuole continuare
+                }
             }
+            
             main.out.writeObject(-1);  
             System.out.println("Richiesta di chiusura inviata al server.");
+            
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Errore durante la connessione o il trasferimento dei dati: " + e.getMessage());
         } finally {
             if (main != null) main.closeConnection();
         }
     }
-}
+}    
