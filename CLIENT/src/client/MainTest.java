@@ -55,7 +55,7 @@ public class MainTest {
         if ("OK".equals(risposta)) {
             // Ricevi i dati del dendrogramma come stringa
             String dendrogramData = (String) in.readObject();
-            mostraDendrogramma(dendrogramData, "Dendrogramma Caricato");
+            System.out.println("Dendrogramma caricato:\n" + dendrogramData);
         } else {
             System.out.println("Errore dal server: " + risposta);
         }
