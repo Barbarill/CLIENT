@@ -65,11 +65,14 @@ public class MainTest {
         out.writeObject(1);
         System.out.println("Introdurre la profondità del dendrogramma");
         int depth = Keyboard.readInt();
+         // Stampa il tipo di dato di 'depth'
+    System.out.println("Tipo di dato di depth: " + ((Object) depth).getClass().getName());
         out.writeObject(depth);
         int dType = -1;
         do {
             System.out.println("Distanza: single-link (1), average-link (2):");
             dType = Keyboard.readInt();
+            System.out.println("Tipo di dato di dType: " + ((Object) dType).getClass().getName());
         } while (dType <= 0 || dType > 2);
         out.writeObject(dType);
 
@@ -78,7 +81,10 @@ public class MainTest {
             System.out.println(in.readObject());
             System.out.println("Inserire il nome dell'archivio (comprensivo di estensione):");
             String fileName = Keyboard.readString();
+            System.out.println("Nome del file inserito: " + fileName);
             out.writeObject(fileName);
+            
+
 
         // Ricevi l'oggetto dendrogramma appena generato (supponendo che sia di tipo `String` o simile)
         String dendrogramData = (String) in.readObject();  // Supponiamo che il server invii i dati come stringa
