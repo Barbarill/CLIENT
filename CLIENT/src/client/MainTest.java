@@ -4,7 +4,7 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import utility.Keyboard;
-import javax.swing.*; // Importa per JFrame, JTextArea, JScrollPane
+
 
 public class MainTest {
     private ObjectOutputStream out;
@@ -97,17 +97,7 @@ public class MainTest {
     }
 }
 
-    // Modifica il metodo per accettare una stringa di dati del dendrogramma
-    private void mostraDendrogramma(String dendrogramData, String titolo) {
-        JFrame frame = new JFrame(titolo);
-        JTextArea textArea = new JTextArea(20, 40);
-        textArea.setText(dendrogramData);  // Mostra il dendrogramma come stringa
-        JScrollPane scrollPane = new JScrollPane(textArea);
-        frame.getContentPane().add(scrollPane);
-        frame.pack();
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setVisible(true);
-    }
+  
 
     private void closeConnection() {
         try {
