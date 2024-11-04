@@ -18,7 +18,7 @@ public class MainTest {
         in = new ObjectInputStream(socket.getInputStream());
     }
 
-    private int menu() {
+    int menu() {
         int answer;
         do {
             System.out.println("(1) Carica Dendrogramma da File");
@@ -45,7 +45,7 @@ public class MainTest {
         } while (!flag);
     }
 
-    private void loadDedrogramFromFileOnServer() throws IOException, ClassNotFoundException {
+    void loadDedrogramFromFileOnServer() throws IOException, ClassNotFoundException {
         System.out.println("Inserire il nome dell'archivio (comprensivo di estensione):");
         String fileName = Keyboard.readString();
 
@@ -61,7 +61,7 @@ public class MainTest {
         }
     }
 
-    private void mineDedrogramOnServer() throws IOException, ClassNotFoundException {
+    void mineDedrogramOnServer() throws IOException, ClassNotFoundException {
         out.writeObject(1);
         System.out.println("Introdurre la profondità del dendrogramma");
         int depth = Keyboard.readInt();
