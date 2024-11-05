@@ -12,11 +12,17 @@ import javafx.scene.control.TextField;
     
         @FXML
         private Button submitButton;
-    
-        @FXML
-        public void onSubmitClicked() {
-            String tableName = tableNameField.getText();
-            System.out.println("Nome della tabella inserito: " + tableName);
-            // Qui puoi usare il valore per inviare la richiesta al server
-        }
+        
+                private MainTest mainTest;
+            
+                @FXML
+                public void onSubmitClicked() {
+                    String tableName = tableNameField.getText();
+                    System.out.println("Nome della tabella inserito: " + tableName);
+                    // Qui puoi usare il valore per inviare la richiesta al server
+                }
+        
+                public void setMainTest(MainTest mainTest) {
+                    this.mainTest = mainTest;
     }
+}
