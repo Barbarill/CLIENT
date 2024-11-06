@@ -1,48 +1,24 @@
-import java.io.IOException;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import client.MainTest;  // Assicurati che MainTest sia nel package corretto
 
 public class MainSceneBuilderController {
 
     @FXML
-    private TextField tableNameField;
-
+    private TextField tableNameField;  // FXML ID per il TextField
     @FXML
-    private Button submitButton;
+    private Label messageLabel;  // FXML ID per il Label
 
+    // Metodo che viene chiamato quando si clicca sul pulsante "Conferma"
     @FXML
-    private Label feedbackLabel;
-
-    private MainTest mainTest;  // L'istanza di MainTest per la logica di connessione
-
-    @FXML
-    public void onSubmitClicked() throws ClassNotFoundException {
+    private void onSubmitClicked() {
         String tableName = tableNameField.getText();
-        System.out.println("Nome della tabella inserito: " + tableName);
 
-        if (tableName == null || tableName.trim().isEmpty()) {
-            feedbackLabel.setText("Nome della tabella non valido!");
-            return;
-        }
-
-        if (mainTest != null) {
-            try {
-                mainTest.sendTableName(tableName);
-                feedbackLabel.setText("Tabella inviata correttamente!");
-            } catch (IOException e) {
-                feedbackLabel.setText("Errore nella connessione al server!");
-                e.printStackTrace();
-            }
+        // Mostra un messaggio nel label
+        if (tableName.isEmpty()) {
+            messageLabel.setText("Inserisci un nome per la tabella.");
         } else {
-            feedbackLabel.setText("Errore: MainTest non inizializzato!");
+            messageLabel.setText("Nome Tabella: " + tableName);
         }
-    }
-
-    // Metodo di iniezione per MainTest
-    public void setMainTest(MainTest mainTest) {
-        this.mainTest = mainTest;
     }
 }
