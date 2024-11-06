@@ -1,34 +1,37 @@
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
-import java.net.InetAddress;
+import client.MainTest;
+
+
 
 public class ClientApp extends Application {
-    private static String serverIp = "127.0.0.1"; // Imposta l'indirizzo IP del server
-    private static int serverPort = 8080; // Imposta la porta del server
-    private MainTest mainTest;
+
+    private MainTest mainTest;  // Gestisce la logica di connessione al server
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/bo.fxml"));
-        Parent root = loader.load();
-        
-        // Ottieni il controller dal loader
-        MainSceneBuilderController controller = loader.getController();
-        controller.setMainTest(mainTest); // Passa l'istanza di MainTest al controller
-
-        primaryStage.setTitle("Client Interface");
-        primaryStage.setScene(new Scene(root));
-        primaryStage.show();
-        
-        // Inizializza la connessione al server
+    public void start(Stage primaryStage) {
         try {
-            mainTest = new MainTest(serverIp, serverPort);
+            // Crea un'istanza di MainTest che sarà utilizzata per la logica
+            mainTest = new MainTest();
+
+            // Carica il file FXML
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainScene.fxml"));
+
+            // Crea il controller e passagli l'istanza di MainTest
+            MainSceneBuilderController controller = loader.getController();
+            controller.setMainTest(mainTest); // Se proprio vuoi avere questa connessione
+
+            Parent root = loader.load();  // Potrebbe lanciare IOException
+
+            primaryStage.setTitle("Client Interface");
+            primaryStage.setScene(new Scene(root));
+            primaryStage.show();
         } catch (IOException e) {
+            // Gestisci l'eccezione (ad esempio, stampa un messaggio di errore)
             e.printStackTrace();
         }
     }
