@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
@@ -14,7 +15,7 @@
         prefWidth="600.0"
         xmlns="http://javafx.com/javafx/23.0.1"
         xmlns:fx="http://javafx.com/fxml/1"
-        fx:controller="com.example.myapp.MainSceneController"> <!-- Assicurati di usare il tuo pacchetto -->
+        fx:controller="MainSceneBuilderController"> <!-- Assicurati di usare il tuo pacchetto -->
    <children>
       <Label layoutX="260.0" layoutY="95.0" prefHeight="32.0" prefWidth="79.0" text="Nome Tabella" textAlignment="CENTER" />
       <Label layoutX="203.0" layoutY="42.0" prefHeight="17.0" prefWidth="194.0" text="Connessione Accettata con il server" />

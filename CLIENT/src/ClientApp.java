@@ -23,6 +23,13 @@ public class ClientApp extends Application {
 
             // Crea il controller e passagli l'istanza di MainTest
             MainSceneBuilderController controller = loader.getController();
+            if (controller == null) {
+                System.out.println("Il controller è null!");
+            } else {
+                controller.setMainTest(mainTest);
+            }
+
+
             controller.setMainTest(mainTest);  // Passa l'istanza di MainTest al controller
 
             // Carica e visualizza la scena
