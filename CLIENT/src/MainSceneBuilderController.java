@@ -1,76 +1,95 @@
 import client.MainTest;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.StackPane;
-import javafx.scene.control.Button;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class MainSceneBuilderController {
 
-    @FXML private StackPane tableNameSection;
-    @FXML private StackPane dendrogramSelectionSection;
-    @FXML private StackPane inputNumberSection;
+    @FXML
+    private TextField tableNameField;
+    @FXML
+    private Label messageLabel;
+    @FXML
+    private Label tableNameLabel;
 
-    @FXML private TextField tableNameField;
-    @FXML private TextField inputNumberField;
 
-    private MainTest mainTest; // Aggiungi questa variabile per memorizzare l'oggetto MainTest
+    private MainTest mainTest;  // Riferimento a MainTest
+    private Stage primaryStage; // Riferimento allo Stage principale
 
-    // Metodo per settare l'istanza di MainTest
+    // Metodo per impostare l'istanza di MainTest
     public void setMainTest(MainTest mainTest) {
         this.mainTest = mainTest;
     }
 
-    // Metodo per confermare il nome della tabella
+    // Metodo per impostare lo Stage principale
+    public void setPrimaryStage(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+    }
+
+    // Metodo per inviare il nome della tabella e cambiare scena
     @FXML
     private void onTableNameConfirm() {
+        // Ottieni il nome della tabella dal TextField
         String tableName = tableNameField.getText();
-        // Logica per inviare il nome della tabella al server
         System.out.println("Tabella selezionata: " + tableName);
 
-        // Usa mainTest per chiamare il metodo corretto
+        // Verifica se il mainTest è stato correttamente inizializzato
         if (mainTest != null) {
             try {
-                mainTest.sendTableName(tableName); // Usa sendTableName al posto di setTableName
+                // Invia il nome della tabella al server
+                mainTest.sendTableName(tableName);
+
+                // Se tableNameLabel non è null, imposta il testo
+                if (tableNameLabel != null) {
+                    tableNameLabel.setText("Nome della tabella: " + tableName);
+                } else {
+                    System.out.println("tableNameLabel non è stato trovato!");
+                }
+
+                // Imposta un messaggio di successo nel messageLabel
+                messageLabel.setText("Nome tabella inviato correttamente!");
+
+                // Cambia alla scena successiva (Scena2)
+                loadScene("/Scena2.fxml");
+
             } catch (IOException | ClassNotFoundException e) {
+                // Stampa l'errore nel log e aggiorna messageLabel con il messaggio di errore
                 e.printStackTrace();
-                System.out.println("Errore durante l'invio del nome della tabella al server.");
+                messageLabel.setText("Errore durante l'invio del nome della tabella.");
             }
+        } else {
+            messageLabel.setText("Errore: mainTest non è stato inizializzato.");
         }
-
-        // Nascondi la sezione del nome della tabella e mostra quella per la selezione del dendrogramma
-        tableNameSection.setVisible(false);
-        dendrogramSelectionSection.setVisible(true);  // Cambia scena qui mostrando la sezione successiva
     }
 
-    // Metodo per selezionare "Carica Dendrogramma da File"
-    @FXML
-    private void onLoadDendrogramFromFile() {
-        System.out.println("Caricamento dendrogramma da file...");
 
-        // Mostra la sezione per inserire il numero (ad esempio, la profondità del dendrogramma)
-        dendrogramSelectionSection.setVisible(false);
-        inputNumberSection.setVisible(true);  // Mostra la sezione del numero
-    }
+    // Metodo per caricare e passare alla scena specificata
+    private void loadScene(String fxmlFile) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+            Parent root = loader.load();
 
-    // Metodo per selezionare "Apprendi Dendrogramma da Database"
-    @FXML
-    private void onLearnDendrogramFromDB() {
-        System.out.println("Apprendimento dendrogramma dal database...");
+            if (primaryStage != null) {
+                primaryStage.getScene().setRoot(root); // Cambia la scena
+            } else {
+                System.out.println("Errore: primaryStage è null");
+            }
 
-        // Mostra la sezione per inserire il numero (ad esempio, la profondità del dendrogramma)
-        dendrogramSelectionSection.setVisible(false);
-        inputNumberSection.setVisible(true);  // Mostra la sezione del numero
-    }
+            // Inizializza il controller della scena successiva
+            ControllerScena2 controller = loader.getController();
+            controller.setMainTest(mainTest);  // Passa l'istanza di MainTest
+            controller.setPrimaryStage(primaryStage);  // Passa lo Stage
+            controller.setTableName(tableNameField.getText()); // Passa il nome della tabella
 
-    // Metodo per confermare il numero
-    @FXML
-    private void onConfirmNumber() {
-        String number = inputNumberField.getText();
-        System.out.println("Numero inserito: " + number);
-
-        // Qui puoi aggiungere la logica per inviare il numero al server
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

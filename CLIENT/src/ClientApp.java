@@ -20,7 +20,8 @@ public class ClientApp extends Application {
 
         // Ottieni il controller e imposta mainTest
         MainSceneBuilderController controller = loader.getController();
-        controller.setMainTest(mainTest);
+        controller.setPrimaryStage(primaryStage);
+        controller.setMainTest(mainTest);  // Passa MainTest
 
         // Crea la scena e aggiungila alla finestra principale
         Scene scene = new Scene(root);

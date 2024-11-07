@@ -53,7 +53,7 @@ public class MainTest {
         } while (!flag);
     }
 
-    void loadDedrogramFromFileOnServer() throws IOException, ClassNotFoundException {
+    public void loadDedrogramFromFileOnServer() throws IOException, ClassNotFoundException {
         System.out.println("Inserire il nome dell'archivio (comprensivo di estensione):");
         String fileName = Keyboard.readString();
 
@@ -69,7 +69,7 @@ public class MainTest {
         }
     }
 
-    void mineDedrogramOnServer() throws IOException, ClassNotFoundException {
+  public  void mineDedrogramOnServer() throws IOException, ClassNotFoundException {
         out.writeObject(1);
         System.out.println("Introdurre la profondità del dendrogramma");
         int depth = Keyboard.readInt();

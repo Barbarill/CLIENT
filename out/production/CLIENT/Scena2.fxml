@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ControllerScena2">
+    <children>
+        <!-- Pulsante per "Carica Dendrogramma da File" -->
+        <Button fx:id="loadDendrogramButton" layoutX="180.0" layoutY="150.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="240.0" text="(1) Carica Dendrogramma da File" onAction="#onLoadDendrogramFromFile" />
+
+        <!-- Pulsante per "Apprendi Dendrogramma da Database" -->
+        <Button fx:id="learnDendrogramButton" layoutX="180.0" layoutY="220.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="240.0" text="(2) Apprendi Dendrogramma da Database" onAction="#onLearnDendrogramFromDB" />
+    </children>
+</AnchorPane>
