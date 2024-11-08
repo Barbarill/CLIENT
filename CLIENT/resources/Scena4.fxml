@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Button?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ControllerScena4">
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ControllerScena4">
     <!-- Etichetta e campo per la profondità -->
-    <Label text="Introdurre la profondità del dendrogramma:" layoutX="50" layoutY="50"/>
-    <TextField fx:id="depthField" layoutX="300" layoutY="50"/>
+    <Label layoutX="50" layoutY="50" text="Introdurre la profondità del dendrogramma:" />
+    <TextField fx:id="depthField" layoutX="300" layoutY="50" />
 
     <!-- Etichetta e campo per la distanza -->
-    <Label text="Distanza: single-link (1), average-link (2):" layoutX="50" layoutY="100"/>
-    <TextField fx:id="distanceField" layoutX="300" layoutY="100"/>
+    <Label layoutX="50" layoutY="100" text="Distanza: single-link (1), average-link (2):" />
+    <TextField fx:id="distanceField" layoutX="300" layoutY="100" />
 
     <!-- Bottone per inviare i dati e visualizzare il dendrogramma -->
-    <Button text="Conferma" layoutX="250" layoutY="150" onAction="#onConfirmButtonClick"/>
+    <Button layoutX="250" layoutY="150" onAction="#onConfirmButtonClick" text="Conferma" />
 
     <!-- Etichetta per il messaggio di stato -->
-    <Label fx:id="messageLabel" layoutX="50" layoutY="200" prefWidth="500"/>
+    <Label fx:id="messageLabel" layoutX="50" layoutY="200" prefWidth="500" />
 
     <!-- Etichetta e campo di testo per il nome del file -->
-    <Label text="Inserisci il nome del file per salvare il dendrogramma:" layoutX="50" layoutY="250"/>
-    <TextField fx:id="fileNameField" layoutX="300" layoutY="250"/>
+    <Label layoutX="50" layoutY="250" text="Inserisci il nome del file per salvare il dendrogramma:" />
+    <TextField fx:id="fileNameField" layoutX="345.0" layoutY="246.0" />
 
     <!-- Bottone per salvare il dendrogramma -->
-    <Button text="Salva Dendrogramma" layoutX="250" layoutY="300" onAction="#onSaveButtonClick"/>
+    <Button layoutX="253.0" layoutY="347.0" onAction="#onSaveButtonClick" text="Salva Dendrogramma" />
 </AnchorPane>
