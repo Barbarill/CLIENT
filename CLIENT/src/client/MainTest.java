@@ -62,40 +62,43 @@ public class MainTest {
     }
 
     private void mineDedrogramOnServer() throws IOException, ClassNotFoundException {
+        // Invio il comando per apprendere un nuovo dendrogramma
         out.writeObject(1);
+    
+        // Richiesta della profondità e invio
         System.out.println("Introdurre la profondità del dendrogramma");
         int depth = Keyboard.readInt();
-         // Stampa il tipo di dato di 'depth'
-    System.out.println("Tipo di dato di depth: " + ((Object) depth).getClass().getName());
         out.writeObject(depth);
-        int dType = -1;
+    
+        // Scelta del tipo di distanza e invio
+        int dType;
         do {
             System.out.println("Distanza: single-link (1), average-link (2):");
             dType = Keyboard.readInt();
-            System.out.println("Tipo di dato di dType: " + ((Object) dType).getClass().getName());
         } while (dType <= 0 || dType > 2);
         out.writeObject(dType);
-
-        String risposta = (String) (in.readObject());
+    
+        // Ricevo risposta dal server
+        String risposta = (String) in.readObject();
         if ("OK".equals(risposta)) {
-            System.out.println(in.readObject());
+            // Stampa il dendrogramma ricevuto dal server
+            String dendrogramData = (String) in.readObject();
+            System.out.println("Dendrogramma generato:\n" + dendrogramData);
+    
+            // Inserimento del nome del file per il salvataggio
             System.out.println("Inserire il nome dell'archivio (comprensivo di estensione):");
             String fileName = Keyboard.readString();
-            System.out.println("Nome del file inserito: " + fileName);
-            out.writeObject(fileName);
-            
-
-
-        // Ricevi l'oggetto dendrogramma appena generato (supponendo che sia di tipo `String` o simile)
-        String dendrogramData = (String) in.readObject();  // Supponiamo che il server invii i dati come stringa
-        out.writeObject(dendrogramData);  // Invia il dendrogramma generato al server per salvarlo
-
-        String saveResponse = (String) in.readObject();
-        System.out.println(saveResponse);
-    } else {
-        System.out.println("Errore dal server: " + risposta);
+            out.writeObject(fileName);  // Invio del nome del file al server
+    
+            // Risposta finale del server sul salvataggio
+            String saveResponse = (String) in.readObject();
+            System.out.println(saveResponse);
+    
+        } else {
+            System.out.println("Errore dal server: " + risposta);
+        }
     }
-}
+    
 
   
 
