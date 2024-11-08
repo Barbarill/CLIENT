@@ -19,6 +19,14 @@ public class MainTest {
         out = new ObjectOutputStream(socket.getOutputStream());
         in = new ObjectInputStream(socket.getInputStream());
     }
+    public ObjectOutputStream getOut() {
+        return out;
+    }
+
+    // Getter per `in`
+    public ObjectInputStream getIn() {
+        return in;
+    }
     public void sendTableName(String tableName) throws IOException, ClassNotFoundException {
         out.writeObject(0); // Codice di operazione per inviare un nome di tabella
         out.writeObject(tableName);

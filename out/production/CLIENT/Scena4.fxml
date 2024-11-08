@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Label?>
@@ -14,6 +13,16 @@
     <Label text="Distanza: single-link (1), average-link (2):" layoutX="50" layoutY="100"/>
     <TextField fx:id="distanceField" layoutX="300" layoutY="100"/>
 
-    <!-- Bottone per inviare i dati -->
+    <!-- Bottone per inviare i dati e visualizzare il dendrogramma -->
     <Button text="Conferma" layoutX="250" layoutY="150" onAction="#onConfirmButtonClick"/>
+
+    <!-- Etichetta per il messaggio di stato -->
+    <Label fx:id="messageLabel" layoutX="50" layoutY="200" prefWidth="500"/>
+
+    <!-- Etichetta e campo di testo per il nome del file -->
+    <Label text="Inserisci il nome del file per salvare il dendrogramma:" layoutX="50" layoutY="250"/>
+    <TextField fx:id="fileNameField" layoutX="300" layoutY="250"/>
+
+    <!-- Bottone per salvare il dendrogramma -->
+    <Button text="Salva Dendrogramma" layoutX="250" layoutY="300" onAction="#onSaveButtonClick"/>
 </AnchorPane>

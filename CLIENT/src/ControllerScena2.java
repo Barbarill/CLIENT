@@ -46,15 +46,26 @@ public class ControllerScena2 {
             Parent root = loader.load();
             primaryStage.getScene().setRoot(root);
 
-            // Inizializza i controller della scena precedente per collegarli ai metodi di MainTest
-            MainSceneBuilderController controller = loader.getController();
-            controller.setMainTest(mainTest);
-            controller.setPrimaryStage(primaryStage);
+            // Ottieni il controller della scena caricata
+            Object controller = loader.getController();
+
+            // Imposta `mainTest` e `primaryStage` a seconda del controller della scena
+            if (controller instanceof MainSceneBuilderController) {
+                ((MainSceneBuilderController) controller).setMainTest(mainTest);
+                ((MainSceneBuilderController) controller).setPrimaryStage(primaryStage);
+            } else if (controller instanceof ControllerScena3) {
+                ((ControllerScena3) controller).setMainTest(mainTest);
+                ((ControllerScena3) controller).setPrimaryStage(primaryStage);
+            } else if (controller instanceof ControllerScena4) {
+                ((ControllerScena4) controller).setMainTest(mainTest);
+                ((ControllerScena4) controller).setPrimaryStage(primaryStage);
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     // Metodo per inviare il comando di caricamento del dendrogramma dal server
     @FXML
