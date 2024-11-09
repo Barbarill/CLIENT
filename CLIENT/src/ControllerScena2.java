@@ -2,7 +2,6 @@ import client.MainTest;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
@@ -39,26 +38,17 @@ public class ControllerScena2 {
         loadScene("/MainScene.fxml");
     }
 
-    // Metodo per caricare e passare alla scena specificata
     private void loadScene(String fxmlFile) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
             Parent root = loader.load();
             primaryStage.getScene().setRoot(root);
 
-            // Ottieni il controller della scena caricata
             Object controller = loader.getController();
-
-            // Imposta `mainTest` e `primaryStage` a seconda del controller della scena
             if (controller instanceof MainSceneBuilderController) {
-                ((MainSceneBuilderController) controller).setMainTest(mainTest);
-                ((MainSceneBuilderController) controller).setPrimaryStage(primaryStage);
-            } else if (controller instanceof ControllerScena3) {
-                ((ControllerScena3) controller).setMainTest(mainTest);
-                ((ControllerScena3) controller).setPrimaryStage(primaryStage);
-            } else if (controller instanceof ControllerScena4) {
-                ((ControllerScena4) controller).setMainTest(mainTest);
-                ((ControllerScena4) controller).setPrimaryStage(primaryStage);
+                MainSceneBuilderController mainController = (MainSceneBuilderController) controller;
+                mainController.setMainTest(mainTest);
+                mainController.setPrimaryStage(primaryStage);
             }
 
         } catch (IOException e) {
@@ -66,19 +56,15 @@ public class ControllerScena2 {
         }
     }
 
-
     // Metodo per inviare il comando di caricamento del dendrogramma dal server
     @FXML
     private void onLoadDendrogramFromFile() {
-        // Passa alla Scena 3 per chiedere il nome del file
         loadScene("/Scena3.fxml");
     }
-
 
     // Metodo per avviare l'apprendimento del dendrogramma dal database
     @FXML
     private void onLearnDendrogramFromDB() {
-        // Passa alla Scena4 per l'inserimento della profondità e della distanza
-        loadScene("/Scena4.fxml");
+        loadScene("/MainScene.fxml");
     }
 }

@@ -3,23 +3,22 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import client.MainTest;  // Assicurati di importare MainTest
+import client.MainTest;
 
 public class ClientApp extends Application {
 
-    private MainTest mainTest;  // Istanza di MainTest
+    private MainTest mainTest;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        // Passa i parametri richiesti al costruttore
         mainTest = new MainTest("127.0.0.1", 8080);  // IP e porta del server
 
-        // Carica il file FXML
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainScene.fxml"));
+        // Carica la scena iniziale con Scena2.fxml invece di MainScene.fxml
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Scena2.fxml"));
         AnchorPane root = loader.load();
 
-        // Ottieni il controller e imposta mainTest
-        MainSceneBuilderController controller = loader.getController();
+        // Ottieni il controller della scena iniziale e imposta mainTest e primaryStage
+        ControllerScena2 controller = loader.getController();
         controller.setPrimaryStage(primaryStage);
         controller.setMainTest(mainTest);  // Passa MainTest
 

@@ -14,7 +14,7 @@ public class MainTest {
 
     public MainTest(String ip, int port) throws IOException {
         InetAddress addr = InetAddress.getByName(ip);
-		System.out.println("addr = " + addr);
+        System.out.println("addr = " + addr);
         Socket socket = new Socket(addr, port);
         out = new ObjectOutputStream(socket.getOutputStream());
         in = new ObjectInputStream(socket.getInputStream());
@@ -23,18 +23,12 @@ public class MainTest {
         return out;
     }
 
-    // Getter per `in`
+    // Getter per in
     public ObjectInputStream getIn() {
         return in;
-    }
-    public void sendTableName(String tableName) throws IOException, ClassNotFoundException {
-        out.writeObject(0); // Codice di operazione per inviare un nome di tabella
-        out.writeObject(tableName);
-        String risposta = (String) in.readObject(); // Aspetta la risposta dal server
-        System.out.println("Risposta dal server: " + risposta);
-    }
+}
 
-    int menu() {
+    private int menu() {
         int answer;
         do {
             System.out.println("(1) Carica Dendrogramma da File");
@@ -45,7 +39,7 @@ public class MainTest {
         return answer;
     }
 
-    private void loadDataOnServer() throws IOException, ClassNotFoundException {
+    public void loadDataOnServer() throws IOException, ClassNotFoundException {
         boolean flag = false;
         do {
             System.out.println("Nome tabella:");
@@ -61,7 +55,7 @@ public class MainTest {
         } while (!flag);
     }
 
-    public void loadDedrogramFromFileOnServer() throws IOException, ClassNotFoundException {
+    private void loadDedrogramFromFileOnServer() throws IOException, ClassNotFoundException {
         System.out.println("Inserire il nome dell'archivio (comprensivo di estensione):");
         String fileName = Keyboard.readString();
 
@@ -77,43 +71,51 @@ public class MainTest {
         }
     }
 
-  public  void mineDedrogramOnServer() throws IOException, ClassNotFoundException {
+    private void mineDedrogramOnServer() throws IOException, ClassNotFoundException {
+        // Invio il comando per apprendere un nuovo dendrogramma
         out.writeObject(1);
+
+        // Richiesta del nome della tabella e invio al server
+        System.out.println("Inserisci il nome della tabella da utilizzare:");
+        String tableName = Keyboard.readString();
+        out.writeObject(tableName);  // Invio del nome della tabella al server
+
+        // Richiesta della profondità e invio
         System.out.println("Introdurre la profondità del dendrogramma");
         int depth = Keyboard.readInt();
-         // Stampa il tipo di dato di 'depth'
-    System.out.println("Tipo di dato di depth: " + ((Object) depth).getClass().getName());
         out.writeObject(depth);
-        int dType = -1;
+
+        // Scelta del tipo di distanza e invio
+        int dType;
         do {
             System.out.println("Distanza: single-link (1), average-link (2):");
             dType = Keyboard.readInt();
-            System.out.println("Tipo di dato di dType: " + ((Object) dType).getClass().getName());
         } while (dType <= 0 || dType > 2);
         out.writeObject(dType);
 
-        String risposta = (String) (in.readObject());
+        // Ricevo risposta dal server
+        String risposta = (String) in.readObject();
         if ("OK".equals(risposta)) {
-            System.out.println(in.readObject());
+            // Stampa il dendrogramma ricevuto dal server
+            String dendrogramData = (String) in.readObject();
+            System.out.println("Dendrogramma generato:\n" + dendrogramData);
+
+            // Inserimento del nome del file per il salvataggio
             System.out.println("Inserire il nome dell'archivio (comprensivo di estensione):");
             String fileName = Keyboard.readString();
-            System.out.println("Nome del file inserito: " + fileName);
-            out.writeObject(fileName);
-            
+            out.writeObject(fileName);  // Invio del nome del file al server
 
+            // Risposta finale del server sul salvataggio
+            String saveResponse = (String) in.readObject();
+            System.out.println(saveResponse);
 
-        // Ricevi l'oggetto dendrogramma appena generato (supponendo che sia di tipo `String` o simile)
-        String dendrogramData = (String) in.readObject();  // Supponiamo che il server invii i dati come stringa
-        out.writeObject(dendrogramData);  // Invia il dendrogramma generato al server per salvarlo
-
-        String saveResponse = (String) in.readObject();
-        System.out.println(saveResponse);
-    } else {
-        System.out.println("Errore dal server: " + risposta);
+        } else {
+            System.out.println("Errore dal server: " + risposta);
+        }
     }
-}
 
-  
+
+
 
     private void closeConnection() {
         try {
@@ -129,41 +131,39 @@ public class MainTest {
         String ip = "127.0.0.1";
         int port = 8080;
         MainTest main = null;
-        
+
         try {
             main = new MainTest(ip, port);
-            
-            boolean continueRunning = true; // Variabile per controllare il ciclo
-            
+
+            boolean continueRunning = true;
+
             while (continueRunning) {
-                main.loadDataOnServer(); // Carica i dati dal server
-                
-                int scelta = main.menu(); // Mostra il menu per la scelta dell'utente
-                
+                int scelta = main.menu();  // Mostra il menu per la scelta dell'utente
+
                 if (scelta == 1) {
-                    main.loadDedrogramFromFileOnServer(); // Carica il dendrogramma da un file
+                    main.loadDedrogramFromFileOnServer();  // Carica il dendrogramma da un file
                 } else if (scelta == 2) {
-                    main.mineDedrogramOnServer(); // Apprendi il dendrogramma dal database
+                    main.mineDedrogramOnServer();  // Apprendi il dendrogramma dal database
                 } else {
                     System.out.println("Scelta non valida. Riprova.");
-                    continue; // Ritorna all'inizio del ciclo se la scelta è non valida
+                    continue;  // Ritorna all'inizio del ciclo se la scelta è non valida
                 }
-    
+
                 // Chiedi se l'utente vuole continuare
                 System.out.print("Vuoi fare un'altra operazione? (S/N): ");
                 String risposta = Keyboard.readString();
                 if (risposta.equalsIgnoreCase("N")) {
-                    continueRunning = false; // Esci dal ciclo se l'utente non vuole continuare
+                    continueRunning = false;
                 }
             }
-            
-            main.out.writeObject(-1);  
+
+            main.out.writeObject(-1);  // Richiesta di chiusura inviata al server
             System.out.println("Richiesta di chiusura inviata al server.");
-            
+
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Errore durante la connessione o il trasferimento dei dati: " + e.getMessage());
         } finally {
             if (main != null) main.closeConnection();
         }
     }
-}    
+}
