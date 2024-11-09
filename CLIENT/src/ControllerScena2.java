@@ -38,6 +38,7 @@ public class ControllerScena2 {
         loadScene("/MainScene.fxml");
     }
 
+    // Metodo generico per caricare una scena specifica e impostare i controller necessari
     private void loadScene(String fxmlFile) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
@@ -49,6 +50,10 @@ public class ControllerScena2 {
                 MainSceneBuilderController mainController = (MainSceneBuilderController) controller;
                 mainController.setMainTest(mainTest);
                 mainController.setPrimaryStage(primaryStage);
+            } else if (controller instanceof ControllerScena3) {
+                ControllerScena3 controllerScena3 = (ControllerScena3) controller;
+                controllerScena3.setMainTest(mainTest);
+                controllerScena3.setPrimaryStage(primaryStage);
             }
 
         } catch (IOException e) {
@@ -56,7 +61,7 @@ public class ControllerScena2 {
         }
     }
 
-    // Metodo per inviare il comando di caricamento del dendrogramma dal server
+    // Metodo per inviare il comando di caricamento del dendrogramma dal server e passare a Scena3.fxml
     @FXML
     private void onLoadDendrogramFromFile() {
         loadScene("/Scena3.fxml");

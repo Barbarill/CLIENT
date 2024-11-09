@@ -59,13 +59,15 @@ public class MainSceneBuilderController {
 
     // Nuovo metodo che invia direttamente il nome della tabella al server
     private void sendTableNameToServer(String tableName) throws IOException, ClassNotFoundException {
-        mainTest.getOut().writeObject(0);  // Invio del comando per inviare il nome della tabella
-        mainTest.getOut().writeObject(tableName);  // Invio del nome della tabella
-        String risposta = (String) mainTest.getIn().readObject();  // Attende la risposta dal server
+        mainTest.setTableName(tableName); // Imposta il nome della tabella in MainTest
+        mainTest.getOut().writeObject(0); // Codice per inviare il nome della tabella
+        mainTest.getOut().writeObject(tableName); // Invia il nome della tabella
+        String risposta = (String) mainTest.getIn().readObject();
         if (!"OK".equals(risposta)) {
             throw new IOException("Errore dal server: " + risposta);
         }
     }
+
 
 
     // Metodo per caricare e passare alla scena specificata

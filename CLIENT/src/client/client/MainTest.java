@@ -11,6 +11,15 @@ import utility.Keyboard;
 public class MainTest {
     private ObjectOutputStream out;
     private ObjectInputStream in;
+    private String tableName;
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
+
+    public String getTableName() {
+        return tableName;
+    }
 
     public MainTest(String ip, int port) throws IOException {
         InetAddress addr = InetAddress.getByName(ip);

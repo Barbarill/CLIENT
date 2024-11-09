@@ -2,71 +2,56 @@ import client.MainTest;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
-import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class ControllerScena4 {
 
-    @FXML private TextField depthField;    // Campo per la profondità
-    @FXML private TextField distanceField; // Campo per la distanza
-    @FXML private Label messageLabel;      // Etichetta per messaggi di errore o successi
-    @FXML private TextField fileNameField; // Campo per il nome del file
+    @FXML private TextField depthField;
+    @FXML private TextField distanceField;
+    @FXML private TextField fileNameField; // Campo per il nome del file di salvataggio
+    @FXML private Label messageLabel;
+    @FXML private TextArea dendrogramTextArea; // TextArea per visualizzare il dendrogramma
 
-    private MainTest mainTest;  // Riferimento a MainTest
+    private MainTest mainTest;
     private Stage primaryStage;
 
-    // Metodo per impostare MainTest
     public void setMainTest(MainTest mainTest) {
         this.mainTest = mainTest;
     }
+
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
 
-    // Metodo chiamato quando l'utente preme il bottone "Conferma"
     @FXML
     private void onConfirmButtonClick() {
         try {
-            // Invia il codice per avviare il processo del dendrogramma
             mainTest.getOut().writeObject(1);
 
-            // Leggi la profondità e inviala al server
+            String tableName = mainTest.getTableName();
+            mainTest.getOut().writeObject(tableName);
+
             String depthText = depthField.getText().trim();
             if (!depthText.isEmpty()) {
                 int depth = Integer.parseInt(depthText);
                 mainTest.getOut().writeObject(depth);
             }
 
-            // Leggi il tipo di distanza e invialo al server
             String distanceText = distanceField.getText().trim();
             if (!distanceText.isEmpty()) {
                 int distance = Integer.parseInt(distanceText);
                 mainTest.getOut().writeObject(distance);
             }
 
-            // Ricevi la risposta dal server
             String risposta = (String) mainTest.getIn().readObject();
 
             if ("OK".equals(risposta)) {
-                // Il server ha accettato i dati, ora ricevi il dendrogramma
                 String dendrogramData = (String) mainTest.getIn().readObject();
-
-                if (dendrogramData != null && !dendrogramData.isEmpty()) {
-                    // Visualizza il dendrogramma ricevuto dal server
-                    messageLabel.setText("Dendrogramma caricato:\n" + dendrogramData);
-
-                    // Ora chiediamo all'utente di inserire il nome del file per salvarlo
-                    messageLabel.setText(messageLabel.getText() + "\nOra inserisci il nome del file per salvare il dendrogramma.");
-
-                    // Creiamo un nuovo campo di input per il nome del file
-                    // Qui l'utente potrà inserire il nome e fare clic su un altro bottone per salvare
-                    // (creeremo un secondo bottone per questa operazione)
-                } else {
-                    messageLabel.setText("Errore nel caricamento del dendrogramma.");
-                }
-
+                dendrogramTextArea.setText(dendrogramData); // Visualizza il dendrogramma nella TextArea
+                messageLabel.setText("Dendrogramma caricato correttamente.");
             } else {
                 messageLabel.setText("Errore dal server: " + risposta);
             }
@@ -77,28 +62,27 @@ public class ControllerScena4 {
             messageLabel.setText("Valore non valido. Inserisci un numero.");
         }
     }
-    // Metodo per gestire il salvataggio del dendrogramma
+
+    // Metodo per salvare il dendrogramma su file
     @FXML
     private void onSaveButtonClick() {
+        String fileName = fileNameField.getText().trim();
+
+        if (fileName.isEmpty()) {
+            messageLabel.setText("Errore: nome file non valido.");
+            return;
+        }
+
         try {
-            // Leggi il nome del file dal campo di input
-            String fileName = fileNameField.getText().trim();
-
-            // Verifica che il nome del file non sia vuoto
-            if (fileName.isEmpty()) {
-                messageLabel.setText("Il nome del file non può essere vuoto.");
-                return;
+            mainTest.getOut().writeObject(fileName);  // Invio del nome del file al server
+            String risposta = (String) mainTest.getIn().readObject();
+            if ("OK".equals(risposta) || "Dendrogramma salvato correttamente.".equals(risposta)) {
+                messageLabel.setText("Salvataggio riuscito.");
+            } else {
+                messageLabel.setText("Errore dal server: " + risposta);
             }
-
-            // Invia il nome del file al server per il salvataggio
-            mainTest.getOut().writeObject(fileName);
-
-            // Ricevi la conferma dal server
-            String saveResponse = (String) mainTest.getIn().readObject();
-            messageLabel.setText(saveResponse);  // Mostra la risposta del server (es. "Salvataggio completato")
-
         } catch (IOException | ClassNotFoundException e) {
-            messageLabel.setText("Errore nel salvataggio del file.");
+            messageLabel.setText("Errore durante il salvataggio del dendrogramma.");
             e.printStackTrace();
         }
     }
