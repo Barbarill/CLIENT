@@ -126,7 +126,7 @@ public class MainTest {
 
 
 
-    private void closeConnection() {
+    public void closeConnection() {
         try {
             if (out != null) out.close();
             if (in != null) in.close();
