@@ -17,7 +17,7 @@
 
     <!-- TextArea per la visualizzazione del dendrogramma -->
     <Label layoutX="50" layoutY="180" text="Dendrogramma:" />
-    <TextArea fx:id="dendrogramTextArea" layoutX="50" layoutY="210" prefWidth="500" prefHeight="150" wrapText="true" />
+    <TextArea fx:id="dendrogramTextArea" layoutX="50" layoutY="210" prefHeight="150" prefWidth="500" wrapText="true" />
 
     <!-- Etichetta e campo di testo per il nome del file -->
     <Label layoutX="50" layoutY="380" text="Inserisci il nome del file per salvare il dendrogramma:" />
@@ -28,4 +28,6 @@
 
     <!-- Etichetta per il messaggio di stato -->
     <Label fx:id="messageLabel" layoutX="50" layoutY="470" prefWidth="500" />
+    <Button layoutX="50.0" layoutY="494.0" onAction="#onTerminaButtonClick" text="Termina" />
+
 </AnchorPane>

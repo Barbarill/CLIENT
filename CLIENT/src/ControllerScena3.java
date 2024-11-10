@@ -1,12 +1,8 @@
-import javafx.animation.PauseTransition;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
 import client.MainTest;
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import javafx.stage.Stage;
 import javafx.scene.control.Alert;
@@ -15,7 +11,6 @@ import javafx.scene.control.ButtonType;
 import java.util.Optional;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.util.Duration;
 
 public class ControllerScena3 {
 
@@ -39,9 +34,7 @@ public class ControllerScena3 {
         this.primaryStage = primaryStage;
     }
 
-
     // Metodo per inviare il comando di caricamento del dendrogramma dal file
-    // In ControllerScena3
     @FXML
     private void onLoadDendrogramFromFile() {
         String fileName = fileNameTextField.getText();  // Ottieni il nome del file dalla TextField
@@ -67,9 +60,7 @@ public class ControllerScena3 {
             } else {
                 messageLabel.setText("Errore dal server: " + serverResponse);
             }
-            PauseTransition pause = new PauseTransition(Duration.seconds(5));  // 2 secondi di attesa
-            pause.setOnFinished(event -> Platform.runLater(() -> askContinueOperation()));  // Esegui il dialogo nel thread della GUI
-            pause.play();
+
         } catch (IOException | ClassNotFoundException e) {
             messageLabel.setText("Errore nel caricamento del file dal server.");
             e.printStackTrace();
@@ -97,6 +88,7 @@ public class ControllerScena3 {
             closeConnection();
         }
     }
+
     // Metodo per caricare una nuova scena
     private void loadScene(String fxmlFile) {
         try {
@@ -115,6 +107,12 @@ public class ControllerScena3 {
             e.printStackTrace();
             messageLabel.setText("Errore nel caricamento della scena.");
         }
+    }
+
+    // Metodo chiamato dal bottone "Termina"
+    @FXML
+    private void onTerminaButtonClick() {
+        askContinueOperation();
     }
 
     // Metodo per chiudere la connessione e chiudere la finestra
