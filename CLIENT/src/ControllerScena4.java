@@ -70,14 +70,19 @@ public class ControllerScena4 {
         }
 
         try {
-            mainTest.getOut().writeObject(fileName);
+            mainTest.getOut().writeObject(fileName);  // Invio del nome del file al server
             String risposta = (String) mainTest.getIn().readObject();
-            messageLabel.setText(risposta.equals("OK") ? "Salvataggio riuscito." : "Errore dal server: " + risposta);
+            if ("OK".equals(risposta) || "Dendrogramma salvato correttamente.".equals(risposta)) {
+                messageLabel.setText("Salvataggio riuscito.");
+            } else {
+                messageLabel.setText("Errore dal server: " + risposta);
+            }
         } catch (IOException | ClassNotFoundException e) {
             messageLabel.setText("Errore durante il salvataggio del dendrogramma.");
             e.printStackTrace();
         }
     }
+
 
     @FXML
     private void onTerminaButtonClick() {
