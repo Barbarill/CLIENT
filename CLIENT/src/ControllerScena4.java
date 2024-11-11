@@ -36,41 +36,67 @@ public class ControllerScena4 {
 
     @FXML
     private void onConfirmButtonClick() {
-        try {
-            mainTest.getOut().writeObject(1);
-            mainTest.getOut().writeObject(mainTest.getTableName());
+        messageLabel.setText("");
+        isConfirmed = false;
 
+        try {
+            // Dichiarazione delle variabili
+            int depth;
+            int distance;
+
+            // Controllo e parsing del campo profondità
             String depthText = depthField.getText().trim();
             if (!depthText.isEmpty()) {
                 try {
-                    int depth = Integer.parseInt(depthText);
-                    mainTest.getOut().writeObject(depth);
+                    depth = Integer.parseInt(depthText);
+                    if (depth <= 0) {
+                        messageLabel.setText("Errore: la profondità deve essere un numero positivo.");
+                        return;
+                    }
                 } catch (NumberFormatException e) {
                     messageLabel.setText("Errore: la profondità deve essere un numero intero.");
                     return;
                 }
+            } else {
+                messageLabel.setText("Errore: il campo della profondità è vuoto.");
+                return;
             }
 
+            // Controllo e parsing del campo distanza
             String distanceText = distanceField.getText().trim();
             if (!distanceText.isEmpty()) {
                 try {
-                    int distance = Integer.parseInt(distanceText);
-                    mainTest.getOut().writeObject(distance);
+                    distance = Integer.parseInt(distanceText);
+                    if (distance <= 0) {
+                        messageLabel.setText("Errore: la distanza deve essere un numero positivo.");
+                        return;
+                    }
                 } catch (NumberFormatException e) {
                     messageLabel.setText("Errore: la distanza deve essere un numero intero.");
                     return;
                 }
+            } else {
+                messageLabel.setText("Errore: il campo della distanza è vuoto.");
+                return;
             }
 
+            // Se tutti i controlli sono passati, ripristina e invia i valori al server
+            mainTest.getOut().reset();
+            mainTest.getOut().writeObject(1);  // Richiesta di caricamento dendrogramma
+            mainTest.getOut().writeObject(mainTest.getTableName());
+            mainTest.getOut().writeObject(depth);
+            mainTest.getOut().writeObject(distance);
+
+            // Riceve la risposta del server
             String risposta = (String) mainTest.getIn().readObject();
             if ("OK".equals(risposta)) {
                 dendrogramTextArea.setText((String) mainTest.getIn().readObject());
                 messageLabel.setText("Dendrogramma caricato correttamente.");
-                isConfirmed = true; // Segna conferma come completata
+                isConfirmed = true;
             } else {
                 messageLabel.setText("Errore dal server: " + risposta);
             }
-        } catch (IOException | ClassNotFoundException | NumberFormatException e) {
+        } catch (IOException | ClassNotFoundException e) {
             messageLabel.setText("Errore nella comunicazione con il server.");
             e.printStackTrace();
         }
@@ -100,14 +126,12 @@ public class ControllerScena4 {
         }
     }
 
-
     @FXML
     private void onTerminaButtonClick() {
         // Controlla se i campi richiesti sono stati completati
         String fileName = fileNameField.getText().trim();
         String depthText = depthField.getText().trim();
         String distanceText = distanceField.getText().trim();
-
 
         if (fileName.isEmpty() || depthText.isEmpty() || distanceText.isEmpty() || !isConfirmed || !isSaved) {
             // Mostra popup di avviso per completare i dati
@@ -135,7 +159,6 @@ public class ControllerScena4 {
             }
         }
     }
-
 
     private void loadScene(String fxmlFile) {
         try {

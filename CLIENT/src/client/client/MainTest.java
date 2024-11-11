@@ -90,16 +90,34 @@ public class MainTest {
         out.writeObject(tableName);  // Invio del nome della tabella al server
 
         // Richiesta della profondità e invio
-        System.out.println("Introdurre la profondità del dendrogramma");
-        int depth = Keyboard.readInt();
+        int depth = -1;
+        while (depth == -1) {
+            System.out.println("Introdurre la profondità del dendrogramma (deve essere un numero positivo):");
+            try {
+                depth = Keyboard.readInt();
+                if (depth <= 0) {
+                    System.out.println("Errore: La profondità deve essere un numero positivo. Riprova.");
+                    depth = -1;  // Forza il reinserimento
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Errore: La profondità deve essere un numero intero. Riprova.");
+            }
+        }
         out.writeObject(depth);
 
         // Scelta del tipo di distanza e invio
-        int dType;
-        do {
+        int dType = -1;
+        while (dType <= 0 || dType > 2) {
             System.out.println("Distanza: single-link (1), average-link (2):");
-            dType = Keyboard.readInt();
-        } while (dType <= 0 || dType > 2);
+            try {
+                dType = Keyboard.readInt();
+                if (dType <= 0 || dType > 2) {
+                    System.out.println("Errore: Devi scegliere tra 1 (single-link) o 2 (average-link). Riprova.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Errore: Devi inserire un numero valido per il tipo di distanza.");
+            }
+        }
         out.writeObject(dType);
 
         // Ricevo risposta dal server
@@ -122,6 +140,7 @@ public class MainTest {
             System.out.println("Errore dal server: " + risposta);
         }
     }
+
 
 
 
