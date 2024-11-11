@@ -3,6 +3,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "MainTest",
+            "request": "launch",
+            "mainClass": "client.MainTest",
+            "projectName": "CLIENT_c2564f76"
+        },
+        {
+            "type": "java",
             "name": "ClientApp",
             "request": "launch",
             "mainClass": "ClientApp",

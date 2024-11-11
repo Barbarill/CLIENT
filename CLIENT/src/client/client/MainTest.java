@@ -141,10 +141,6 @@ public class MainTest {
         }
     }
 
-
-
-
-
     public void closeConnection() {
         try {
             if (out != null) out.close();
