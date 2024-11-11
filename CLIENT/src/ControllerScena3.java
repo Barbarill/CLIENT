@@ -23,6 +23,7 @@ public class ControllerScena3 {
 
     private MainTest mainTest;  // Riferimento a MainTest
     private Stage primaryStage;
+    private boolean isDendrogramLoaded = false;
 
     // Metodo per impostare l'istanza di MainTest
     public void setMainTest(MainTest mainTest) {
@@ -57,6 +58,7 @@ public class ControllerScena3 {
                 String dendrogramData = (String) mainTest.getIn().readObject();
                 dendrogramTextArea.setText(dendrogramData);
                 messageLabel.setText("Dendrogramma caricato con successo.");
+                isDendrogramLoaded = true;
             } else {
                 messageLabel.setText("Errore dal server: " + serverResponse);
             }
@@ -69,23 +71,33 @@ public class ControllerScena3 {
 
     // Metodo per mostrare la finestra di dialogo
     private void askContinueOperation() {
-        Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setTitle("Conferma");
-        alert.setHeaderText(null);
-        alert.setContentText("Vuoi fare un'altra operazione? (S/N)");
+        Alert alert;
 
-        ButtonType buttonTypeYes = new ButtonType("S");
-        ButtonType buttonTypeNo = new ButtonType("N");
-
-        alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == buttonTypeYes) {
-            // Se l'utente sceglie "S", torna alla Scena2
-            loadScene("/Scena2.fxml");
+        if (!isDendrogramLoaded || fileNameTextField.getText().isEmpty()) {
+            // Popup di avviso per completare l'inserimento dei dati
+            alert = new Alert(AlertType.WARNING);
+            alert.setTitle("Avviso");
+            alert.setHeaderText(null);
+            alert.setContentText("Terminare l'inserimento dei dati prima di procedere.");
+            alert.showAndWait();
         } else {
-            // Se l'utente sceglie "N", chiudi la connessione
-            closeConnection();
+            // Popup di conferma per chiedere se continuare o meno
+            alert = new Alert(AlertType.CONFIRMATION);
+            alert.setTitle("Conferma");
+            alert.setHeaderText(null);
+            alert.setContentText("Vuoi fare un'altra operazione? (S/N)");
+
+            ButtonType buttonTypeYes = new ButtonType("S");
+            ButtonType buttonTypeNo = new ButtonType("N");
+
+            alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.isPresent() && result.get() == buttonTypeYes) {
+                loadScene("/Scena2.fxml");
+            } else {
+                closeConnection();
+            }
         }
     }
 

@@ -23,6 +23,9 @@ public class ControllerScena4 {
     private MainTest mainTest;
     private Stage primaryStage;
 
+    private boolean isConfirmed = false;
+    private boolean isSaved = false;
+
     public void setMainTest(MainTest mainTest) {
         this.mainTest = mainTest;
     }
@@ -39,18 +42,31 @@ public class ControllerScena4 {
 
             String depthText = depthField.getText().trim();
             if (!depthText.isEmpty()) {
-                mainTest.getOut().writeObject(Integer.parseInt(depthText));
+                try {
+                    int depth = Integer.parseInt(depthText);
+                    mainTest.getOut().writeObject(depth);
+                } catch (NumberFormatException e) {
+                    messageLabel.setText("Errore: la profondità deve essere un numero intero.");
+                    return;
+                }
             }
 
             String distanceText = distanceField.getText().trim();
             if (!distanceText.isEmpty()) {
-                mainTest.getOut().writeObject(Integer.parseInt(distanceText));
+                try {
+                    int distance = Integer.parseInt(distanceText);
+                    mainTest.getOut().writeObject(distance);
+                } catch (NumberFormatException e) {
+                    messageLabel.setText("Errore: la distanza deve essere un numero intero.");
+                    return;
+                }
             }
 
             String risposta = (String) mainTest.getIn().readObject();
             if ("OK".equals(risposta)) {
                 dendrogramTextArea.setText((String) mainTest.getIn().readObject());
                 messageLabel.setText("Dendrogramma caricato correttamente.");
+                isConfirmed = true; // Segna conferma come completata
             } else {
                 messageLabel.setText("Errore dal server: " + risposta);
             }
@@ -74,6 +90,7 @@ public class ControllerScena4 {
             String risposta = (String) mainTest.getIn().readObject();
             if ("OK".equals(risposta) || "Dendrogramma salvato correttamente.".equals(risposta)) {
                 messageLabel.setText("Salvataggio riuscito.");
+                isSaved = true;
             } else {
                 messageLabel.setText("Errore dal server: " + risposta);
             }
@@ -86,22 +103,39 @@ public class ControllerScena4 {
 
     @FXML
     private void onTerminaButtonClick() {
-        Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setTitle("Conferma");
-        alert.setHeaderText(null);
-        alert.setContentText("Vuoi fare un'altra operazione? (S/N)");
+        // Controlla se i campi richiesti sono stati completati
+        String fileName = fileNameField.getText().trim();
+        String depthText = depthField.getText().trim();
+        String distanceText = distanceField.getText().trim();
 
-        ButtonType buttonTypeYes = new ButtonType("S");
-        ButtonType buttonTypeNo = new ButtonType("N");
 
-        alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == buttonTypeYes) {
-            loadScene("/Scena2.fxml");
+        if (fileName.isEmpty() || depthText.isEmpty() || distanceText.isEmpty() || !isConfirmed || !isSaved) {
+            // Mostra popup di avviso per completare i dati
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setTitle("Avviso");
+            alert.setHeaderText(null);
+            alert.setContentText("Terminare l'inserimento dei dati prima di procedere.");
+            alert.showAndWait();
         } else {
-            closeConnection();
+            // Popup di conferma finale per decidere se continuare o terminare
+            Alert alert = new Alert(AlertType.CONFIRMATION);
+            alert.setTitle("Conferma");
+            alert.setHeaderText(null);
+            alert.setContentText("Vuoi fare un'altra operazione? (S/N)");
+
+            ButtonType buttonTypeYes = new ButtonType("S");
+            ButtonType buttonTypeNo = new ButtonType("N");
+
+            alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == buttonTypeYes) {
+                loadScene("/Scena2.fxml");
+            } else {
+                closeConnection();
+            }
         }
     }
+
 
     private void loadScene(String fxmlFile) {
         try {

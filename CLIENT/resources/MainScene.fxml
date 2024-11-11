@@ -3,12 +3,12 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainSceneBuilderController"> <!-- Assicurati di usare il tuo pacchetto -->
-   <children>
-      <Label fx:id="tableNameLabel" layoutX="260.0" layoutY="95.0" prefHeight="32.0" prefWidth="79.0" text="Nome Tabella" textAlignment="CENTER" />
+<StackPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainSceneBuilderController">
+   <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
+      <Label fx:id="tableNameLabel" layoutX="260.0" layoutY="95.0" prefHeight="32.0" prefWidth="79.0" text="Nome Tabella" textAlignment="CENTER" wrapText="true" />
       <TextField fx:id="tableNameField" layoutX="225.0" layoutY="151.0" />
       <Button fx:id="submitButton" layoutX="266.0" layoutY="187.0" mnemonicParsing="false" onAction="#onTableNameConfirm" prefHeight="25.0" prefWidth="68.0" text="Conferma" />
-      <Label fx:id="messageLabel" layoutX="206.0" layoutY="230.0" prefHeight="32.0" prefWidth="200.0" text="" />
-      <Label layoutX="175.0" layoutY="47.0" prefHeight="18.0" prefWidth="262.0" text="Inserisci il nome della tabella presente su MySql" /> <!-- Aggiungi questa riga se vuoi visualizzare messaggi -->
-   </children>
-</AnchorPane>
+      <Label fx:id="messageLabel" layoutX="206.0" layoutY="230.0" prefHeight="68.0" prefWidth="200.0" text="" wrapText="true" />
+      <Label layoutX="175.0" layoutY="47.0" prefHeight="18.0" prefWidth="262.0" text="Inserisci il nome della tabella presente su MySql" wrapText="true" />
+   </AnchorPane>
+</StackPane>

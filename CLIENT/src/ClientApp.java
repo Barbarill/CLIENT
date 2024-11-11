@@ -1,7 +1,7 @@
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import client.MainTest;
 
@@ -15,7 +15,7 @@ public class ClientApp extends Application {
 
         // Carica la scena iniziale con Scena2.fxml invece di MainScene.fxml
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Scena2.fxml"));
-        AnchorPane root = loader.load();
+        Parent root = loader.load();
 
         // Ottieni il controller della scena iniziale e imposta mainTest e primaryStage
         ControllerScena2 controller = loader.getController();
