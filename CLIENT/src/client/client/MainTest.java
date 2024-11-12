@@ -7,8 +7,13 @@ import java.net.InetAddress;
 import java.net.Socket;
 import utility.Keyboard;
 
-
+/**
+ * La classe MainTest è responsabile della connessione al server, della
+ * gestione del menu delle operazioni e della comunicazione con il server
+ * per caricare o apprendere un dendrogramma basato sui dati del database.
+ */
 public class MainTest {
+    // Variabili di flusso per la comunicazione
     private ObjectOutputStream out;
     private ObjectInputStream in;
     private String tableName;
@@ -23,19 +28,18 @@ public class MainTest {
 
     public MainTest(String ip, int port) throws IOException {
         InetAddress addr = InetAddress.getByName(ip);
-        System.out.println("addr = " + addr);
         Socket socket = new Socket(addr, port);
         out = new ObjectOutputStream(socket.getOutputStream());
         in = new ObjectInputStream(socket.getInputStream());
     }
+
     public ObjectOutputStream getOut() {
         return out;
     }
 
-    // Getter per in
     public ObjectInputStream getIn() {
         return in;
-}
+    }
 
     private int menu() {
         int answer;
@@ -53,7 +57,7 @@ public class MainTest {
         do {
             System.out.println("Nome tabella:");
             String tableName = Keyboard.readString();
-            out.writeObject(0);
+            out.writeObject(0);  // comando per caricare i dati
             out.writeObject(tableName);
             String risposta = (String) (in.readObject());
             if ("OK".equals(risposta)) {
@@ -67,12 +71,10 @@ public class MainTest {
     private void loadDedrogramFromFileOnServer() throws IOException, ClassNotFoundException {
         System.out.println("Inserire il nome dell'archivio (comprensivo di estensione):");
         String fileName = Keyboard.readString();
-
-        out.writeObject(2);
+        out.writeObject(2);  // comando per caricare dal file
         out.writeObject(fileName);
         String risposta = (String) in.readObject();
         if ("OK".equals(risposta)) {
-            // Ricevi i dati del dendrogramma come stringa
             String dendrogramData = (String) in.readObject();
             System.out.println("Dendrogramma caricato:\n" + dendrogramData);
         } else {
@@ -81,15 +83,12 @@ public class MainTest {
     }
 
     private void mineDedrogramOnServer() throws IOException, ClassNotFoundException {
-        // Invio il comando per apprendere un nuovo dendrogramma
-        out.writeObject(1);
-
-        // Richiesta del nome della tabella e invio al server
+        out.writeObject(1);  // comando per generare il dendrogramma
         System.out.println("Inserisci il nome della tabella da utilizzare:");
         String tableName = Keyboard.readString();
-        out.writeObject(tableName);  // Invio del nome della tabella al server
+        out.writeObject(tableName);
 
-        // Richiesta della profondità e invio
+        // Gestione della profondità
         int depth = -1;
         while (depth == -1) {
             System.out.println("Introdurre la profondità del dendrogramma (deve essere un numero positivo):");
@@ -97,7 +96,7 @@ public class MainTest {
                 depth = Keyboard.readInt();
                 if (depth <= 0) {
                     System.out.println("Errore: La profondità deve essere un numero positivo. Riprova.");
-                    depth = -1;  // Forza il reinserimento
+                    depth = -1;
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Errore: La profondità deve essere un numero intero. Riprova.");
@@ -105,7 +104,7 @@ public class MainTest {
         }
         out.writeObject(depth);
 
-        // Scelta del tipo di distanza e invio
+        // Gestione del tipo di distanza
         int dType = -1;
         while (dType <= 0 || dType > 2) {
             System.out.println("Distanza: single-link (1), average-link (2):");
@@ -120,22 +119,16 @@ public class MainTest {
         }
         out.writeObject(dType);
 
-        // Ricevo risposta dal server
         String risposta = (String) in.readObject();
         if ("OK".equals(risposta)) {
-            // Stampa il dendrogramma ricevuto dal server
             String dendrogramData = (String) in.readObject();
             System.out.println("Dendrogramma generato:\n" + dendrogramData);
 
-            // Inserimento del nome del file per il salvataggio
             System.out.println("Inserire il nome dell'archivio (comprensivo di estensione):");
             String fileName = Keyboard.readString();
-            out.writeObject(fileName);  // Invio del nome del file al server
-
-            // Risposta finale del server sul salvataggio
+            out.writeObject(fileName);
             String saveResponse = (String) in.readObject();
             System.out.println(saveResponse);
-
         } else {
             System.out.println("Errore dal server: " + risposta);
         }
@@ -158,22 +151,20 @@ public class MainTest {
 
         try {
             main = new MainTest(ip, port);
-
             boolean continueRunning = true;
 
             while (continueRunning) {
-                int scelta = main.menu();  // Mostra il menu per la scelta dell'utente
+                int scelta = main.menu();
 
                 if (scelta == 1) {
-                    main.loadDedrogramFromFileOnServer();  // Carica il dendrogramma da un file
+                    main.loadDedrogramFromFileOnServer();
                 } else if (scelta == 2) {
-                    main.mineDedrogramOnServer();  // Apprendi il dendrogramma dal database
+                    main.mineDedrogramOnServer();
                 } else {
                     System.out.println("Scelta non valida. Riprova.");
-                    continue;  // Ritorna all'inizio del ciclo se la scelta è non valida
+                    continue;
                 }
 
-                // Chiedi se l'utente vuole continuare
                 System.out.print("Vuoi fare un'altra operazione? (S/N): ");
                 String risposta = Keyboard.readString();
                 if (risposta.equalsIgnoreCase("N")) {
@@ -181,7 +172,7 @@ public class MainTest {
                 }
             }
 
-            main.out.writeObject(-1);  // Richiesta di chiusura inviata al server
+            main.out.writeObject(-1); // comando di chiusura
             System.out.println("Richiesta di chiusura inviata al server.");
 
         } catch (IOException | ClassNotFoundException e) {

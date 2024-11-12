@@ -6,6 +6,13 @@
             "name": "MainTest",
             "request": "launch",
             "mainClass": "client.MainTest",
+            "projectName": "CLIENT"
+        },
+        {
+            "type": "java",
+            "name": "MainTest",
+            "request": "launch",
+            "mainClass": "client.MainTest",
             "projectName": "CLIENT_c2564f76"
         },
         {

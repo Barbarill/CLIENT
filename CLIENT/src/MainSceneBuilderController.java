@@ -8,34 +8,53 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Controller per la scena principale, responsabile di gestire l'invio del nome della tabella al server e
+ * il caricamento della scena successiva.
+ */
 public class MainSceneBuilderController {
 
+    /** Campo di testo per l'inserimento del nome della tabella. */
     @FXML
     private TextField tableNameField;
+
+    /** Etichetta per la visualizzazione dei messaggi all'utente. */
     @FXML
     private Label messageLabel;
 
-    private MainTest mainTest;  // Riferimento a MainTest
-    private Stage primaryStage; // Riferimento allo Stage principale
+    /** Riferimento all'istanza di MainTest per la gestione della comunicazione col server. */
+    private MainTest mainTest;
 
-    // Metodo per impostare l'istanza di MainTest
+    /** Riferimento allo Stage principale, usato per cambiare le scene. */
+    private Stage primaryStage;
+
+    /**
+     * Imposta l'istanza di MainTest.
+     * @param mainTest l'istanza di MainTest da utilizzare per la comunicazione col server.
+     */
     public void setMainTest(MainTest mainTest) {
         this.mainTest = mainTest;
     }
 
-    // Metodo per impostare lo Stage principale
+    /**
+     * Imposta lo Stage principale.
+     * @param primaryStage lo Stage principale dell'applicazione.
+     */
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
 
-    // Metodo per inviare il nome della tabella e cambiare scena
+    /**
+     * Gestisce il click sul pulsante di conferma per il nome della tabella.
+     * Invia il nome della tabella al server e carica la scena successiva in caso di successo.
+     */
     @FXML
     private void onTableNameConfirm() {
         String tableName = tableNameField.getText();
 
         if (tableName == null || tableName.trim().isEmpty()) {
             messageLabel.setText("Errore: Nome tabella non valido.");
-            return;  // Esci dal metodo se il nome è vuoto
+            return;  // Esce dal metodo se il nome è vuoto
         }
 
         if (mainTest != null) {
@@ -57,7 +76,12 @@ public class MainSceneBuilderController {
         }
     }
 
-    // Nuovo metodo che invia direttamente il nome della tabella al server
+    /**
+     * Invia il nome della tabella al server tramite l'istanza di MainTest.
+     * @param tableName il nome della tabella da inviare.
+     * @throws IOException se si verifica un errore nella comunicazione con il server.
+     * @throws ClassNotFoundException se si verifica un errore nella ricezione della risposta dal server.
+     */
     private void sendTableNameToServer(String tableName) throws IOException, ClassNotFoundException {
         mainTest.setTableName(tableName); // Imposta il nome della tabella in MainTest
         mainTest.getOut().writeObject(0); // Codice per inviare il nome della tabella
@@ -68,9 +92,10 @@ public class MainSceneBuilderController {
         }
     }
 
-
-
-    // Metodo per caricare e passare alla scena specificata
+    /**
+     * Carica e visualizza una nuova scena specificata.
+     * @param fxmlFile il percorso del file FXML da caricare.
+     */
     private void loadScene(String fxmlFile) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
@@ -82,7 +107,7 @@ public class MainSceneBuilderController {
                 System.out.println("Errore: primaryStage è null");
             }
 
-            // Ottieni il controller della scena caricata e passa le dipendenze
+            // Ottiene il controller della scena caricata e passa le dipendenze
             Object controller = loader.getController();
 
             if (controller instanceof ControllerScena2) {

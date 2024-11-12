@@ -1,8 +1,8 @@
+import client.MainTest;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
-import client.MainTest;
 import java.io.IOException;
 import javafx.stage.Stage;
 import javafx.scene.control.Alert;
@@ -12,33 +12,54 @@ import java.util.Optional;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
+/**
+ * La classe ControllerScena3 gestisce gli eventi e la logica della scena Scena3.fxml,
+ * inclusa la visualizzazione e il caricamento di un dendrogramma da file.
+ */
 public class ControllerScena3 {
 
-    @FXML
-    private TextField fileNameTextField;
-    @FXML
-    private TextArea dendrogramTextArea;
-    @FXML
-    private Label messageLabel;
+    /** Campo di testo per inserire il nome del file del dendrogramma. */
+    @FXML private TextField fileNameTextField;
 
-    private MainTest mainTest;  // Riferimento a MainTest
+    /** Area di testo per visualizzare i dati del dendrogramma. */
+    @FXML private TextArea dendrogramTextArea;
+
+    /** Etichetta per mostrare messaggi all'utente. */
+    @FXML private Label messageLabel;
+
+    /** Riferimento a MainTest per la connessione e la comunicazione con il server. */
+    private MainTest mainTest;
+
+    /** Riferimento allo Stage principale per la gestione delle scene. */
     private Stage primaryStage;
+
+    /** Variabile per controllare se il dendrogramma è stato caricato con successo. */
     private boolean isDendrogramLoaded = false;
 
-    // Metodo per impostare l'istanza di MainTest
+    /**
+     * Imposta l'istanza di MainTest per le operazioni con il server.
+     * @param mainTest l'istanza di MainTest da impostare
+     */
     public void setMainTest(MainTest mainTest) {
         this.mainTest = mainTest;
     }
 
-    // Metodo per impostare lo Stage principale
+    /**
+     * Imposta lo Stage principale per il controllo delle scene.
+     * @param primaryStage lo Stage principale dell'applicazione
+     */
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
 
-    // Metodo per inviare il comando di caricamento del dendrogramma dal file
+    /**
+     * Metodo per inviare il comando di caricamento del dendrogramma dal file.
+     * Riceve il nome del file dalla TextField, invia la richiesta al server,
+     * e visualizza il contenuto del dendrogramma nella TextArea.
+     */
     @FXML
     private void onLoadDendrogramFromFile() {
-        String fileName = fileNameTextField.getText();  // Ottieni il nome del file dalla TextField
+        String fileName = fileNameTextField.getText();
 
         if (fileName.isEmpty()) {
             messageLabel.setText("Inserisci il nome del file.");
@@ -46,15 +67,14 @@ public class ControllerScena3 {
         }
 
         try {
-            // Invia il nome del file al server tramite MainTest
-            mainTest.getOut().writeObject(2);  // Indica al server l'azione da eseguire
-            mainTest.getOut().writeObject(fileName);  // Invio del nome del file
+            // Invio della richiesta al server
+            mainTest.getOut().writeObject(2);  // Indica l'azione di caricamento file
+            mainTest.getOut().writeObject(fileName);
 
-            // Ricevi la risposta dal server
+            // Ricezione della risposta del server
             String serverResponse = (String) mainTest.getIn().readObject();
 
             if ("OK".equals(serverResponse)) {
-                // Ricevi i dati del dendrogramma dal server e visualizzali nella TextArea
                 String dendrogramData = (String) mainTest.getIn().readObject();
                 dendrogramTextArea.setText(dendrogramData);
                 messageLabel.setText("Dendrogramma caricato con successo.");
@@ -69,19 +89,20 @@ public class ControllerScena3 {
         }
     }
 
-    // Metodo per mostrare la finestra di dialogo
+    /**
+     * Mostra una finestra di dialogo per chiedere all'utente se desidera continuare o terminare.
+     * Mostra un avviso se i dati non sono completi, oppure una conferma per un'altra operazione.
+     */
     private void askContinueOperation() {
         Alert alert;
 
         if (!isDendrogramLoaded || fileNameTextField.getText().isEmpty()) {
-            // Popup di avviso per completare l'inserimento dei dati
             alert = new Alert(AlertType.WARNING);
             alert.setTitle("Avviso");
             alert.setHeaderText(null);
             alert.setContentText("Terminare l'inserimento dei dati prima di procedere.");
             alert.showAndWait();
         } else {
-            // Popup di conferma per chiedere se continuare o meno
             alert = new Alert(AlertType.CONFIRMATION);
             alert.setTitle("Conferma");
             alert.setHeaderText(null);
@@ -101,13 +122,19 @@ public class ControllerScena3 {
         }
     }
 
-    // Metodo per caricare una nuova scena
+    /**
+     * Carica una nuova scena specificata e imposta i controller necessari.
+     * Questo metodo consente di navigare tra le scene dell'applicazione.
+     *
+     * @param fxmlFile il file FXML della scena da caricare
+     */
     private void loadScene(String fxmlFile) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
             Parent root = loader.load();
             primaryStage.getScene().setRoot(root);
 
+            // Imposta il controller della nuova scena con MainTest e Stage
             Object controller = loader.getController();
             if (controller instanceof ControllerScena2) {
                 ControllerScena2 controllerScena2 = (ControllerScena2) controller;
@@ -121,13 +148,18 @@ public class ControllerScena3 {
         }
     }
 
-    // Metodo chiamato dal bottone "Termina"
+    /**
+     * Gestisce il click sul bottone "Termina", aprendo una finestra di dialogo
+     * che chiede se continuare con un'altra operazione o chiudere l'applicazione.
+     */
     @FXML
     private void onTerminaButtonClick() {
         askContinueOperation();
     }
 
-    // Metodo per chiudere la connessione e chiudere la finestra
+    /**
+     * Chiude la connessione e termina l'applicazione.
+     */
     private void closeConnection() {
         mainTest.closeConnection();
         primaryStage.close();
