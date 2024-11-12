@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<StackPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainSceneBuilderController">
+<StackPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ControllerScena1">
    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
       <Label fx:id="tableNameLabel" layoutX="260.0" layoutY="95.0" prefHeight="32.0" prefWidth="79.0" text="Nome Tabella" textAlignment="CENTER" wrapText="true" />
       <TextField fx:id="tableNameField" layoutX="225.0" layoutY="151.0" />

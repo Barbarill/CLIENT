@@ -8,46 +8,76 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * La classe ControllerScena2 gestisce gli eventi e la logica della scena Scena2.fxml,
+ * inclusa la visualizzazione del nome della tabella selezionata e la navigazione
+ * tra le varie scene dell'applicazione.
+ */
 public class ControllerScena2 {
 
+    /** Etichetta per visualizzare il nome della tabella selezionata. */
     @FXML private Label tableNameLabel;
+
+    /** Etichetta per visualizzare messaggi informativi per l'utente. */
     @FXML private Label messageLabel;
+
+    /** Bottone per tornare alla scena precedente. */
     @FXML private Button backButton;
 
-    private MainTest mainTest;  // Riferimento a MainTest
-    private Stage primaryStage; // Riferimento allo Stage principale
+    /** Riferimento all'istanza di MainTest per la connessione e la comunicazione con il server. */
+    private MainTest mainTest;
 
-    // Metodo per impostare l'istanza di MainTest
+    /** Riferimento allo Stage principale per il controllo delle scene dell'applicazione. */
+    private Stage primaryStage;
+
+    /**
+     * Imposta l'istanza di MainTest da utilizzare per le operazioni con il server.
+     * @param mainTest l'istanza di MainTest da impostare
+     */
     public void setMainTest(MainTest mainTest) {
         this.mainTest = mainTest;
     }
 
-    // Metodo per impostare lo Stage principale
+    /**
+     * Imposta lo Stage principale per il controllo delle scene.
+     * @param primaryStage lo Stage principale dell'applicazione
+     */
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
 
-    // Metodo per ricevere e visualizzare il nome della tabella nella seconda scena
+    /**
+     * Imposta e visualizza il nome della tabella selezionata nell'etichetta.
+     * @param tableName il nome della tabella da visualizzare
+     */
     public void setTableName(String tableName) {
         tableNameLabel.setText("Tabella selezionata: " + tableName);
     }
 
-    // Metodo per tornare alla scena precedente (MainScene.fxml)
+    /**
+     * Gestisce l'evento di click sul bottone "Indietro", caricando la scena precedente.
+     */
     @FXML
     private void onBackButtonClick() {
-        loadScene("/MainScene.fxml");
+        loadScene("/Scena1.fxml");
     }
 
-    // Metodo generico per caricare una scena specifica e impostare i controller necessari
+    /**
+     * Carica una scena specificata e imposta i controller necessari per il contesto.
+     * Questo metodo consente di passare a diverse scene dell'applicazione.
+     *
+     * @param fxmlFile il file FXML della scena da caricare
+     */
     private void loadScene(String fxmlFile) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
             Parent root = loader.load();
             primaryStage.getScene().setRoot(root);
 
+            // Ottiene il controller della nuova scena e imposta MainTest e Stage.
             Object controller = loader.getController();
-            if (controller instanceof MainSceneBuilderController) {
-                MainSceneBuilderController mainController = (MainSceneBuilderController) controller;
+            if (controller instanceof ControllerScena1) {
+                ControllerScena1 mainController = (ControllerScena1) controller;
                 mainController.setMainTest(mainTest);
                 mainController.setPrimaryStage(primaryStage);
             } else if (controller instanceof ControllerScena3) {
@@ -61,15 +91,19 @@ public class ControllerScena2 {
         }
     }
 
-    // Metodo per inviare il comando di caricamento del dendrogramma dal server e passare a Scena3.fxml
+    /**
+     * Gestisce il caricamento del dendrogramma da un file e passa alla scena Scena3.fxml.
+     */
     @FXML
     private void onLoadDendrogramFromFile() {
         loadScene("/Scena3.fxml");
     }
 
-    // Metodo per avviare l'apprendimento del dendrogramma dal database
+    /**
+     * Avvia l'apprendimento del dendrogramma dal database e torna alla scena Scena1.fxml.
+     */
     @FXML
     private void onLearnDendrogramFromDB() {
-        loadScene("/MainScene.fxml");
+        loadScene("/Scena1.fxml");
     }
 }
